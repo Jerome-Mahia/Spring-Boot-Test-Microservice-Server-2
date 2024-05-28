@@ -1,0 +1,28 @@
+version: '3.7'
+services:
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=adapt3r
+      - RABBITMQ_DEFAULT_PASS=password
+      - RABBITMQ_DEFAULT_VHOST=/
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      -  adapter_net
+    volumes:
+      - rabbit:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 1m
+      timeout: 30s
+      retries: 3
+      start_period: 30s
+volumes:
+  adapter:
+  rabbit:
+networks:
+  adapter_net:
+    driver: bridge
